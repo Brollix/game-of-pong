@@ -26,6 +26,11 @@ x64/
 Thumbs.db
 
 # Carpeta de release automático y ZIP de distribución
-/libs/
 /dist/
 /release.zip
+
+# Script de empaquetado local
+/package_release.bat
+
+# Dependencias externas (DLLs, no versionadas)
+/libs/
