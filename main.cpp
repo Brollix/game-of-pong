@@ -10,10 +10,14 @@
 #include <iostream>
 using namespace std;
 
-#include "Game.h"
+int width = 1280;
+int height = 720;
+
+#include "src/Game.h"
 
 int main(int argc, char* argv[]) {
-    Game game(1280, 720);
+
+    Game game(width, height);
 
     if (!game.init()) {
         cerr << "Error al iniciar el juego." << endl;

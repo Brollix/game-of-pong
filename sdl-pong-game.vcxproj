@@ -142,13 +142,17 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ball.h" />
-    <ClInclude Include="Collisions.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="HUD.h" />
-    <ClInclude Include="Menu.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Utils.h" />
+    <None Include=".gitignore" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Ball.h" />
+    <ClInclude Include="src\Collisions.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\HUD.h" />
+    <ClInclude Include="src\Menu.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
