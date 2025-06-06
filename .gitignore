@@ -19,9 +19,8 @@ x64/
 *.opendb
 
 # Ignorar carpeta de versiones manuales
-pong-versiones/
+/pong-versions
 
 # Archivos del sistema operativo
 .DS_Store
 Thumbs.db
-/pong-versions
