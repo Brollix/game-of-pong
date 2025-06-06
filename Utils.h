@@ -1,12 +1,5 @@
 #pragma once
 
-
-#include <cmath>
-
-// =======================
-// Vec2f (float version)
-// =======================
-
 struct Vec2f {
     float x = 0.0f;
     float y = 0.0f;
@@ -15,42 +8,51 @@ struct Vec2f {
     Vec2f(float x, float y) : x(x), y(y) {
     }
 
-// Operadores aritméticos
+    // Operadores simples
+
+    // Suma
     Vec2f operator+(const Vec2f& other) const {
         return Vec2f(x + other.x, y + other.y);
     }
 
+    // Resta
     Vec2f operator-(const Vec2f& other) const {
         return Vec2f(x - other.x, y - other.y);
     }
-
+    // Mult
     Vec2f operator*(float scalar) const {
         return Vec2f(x * scalar, y * scalar);
     }
 
+    // Div
     Vec2f operator/(float scalar) const {
         return Vec2f(x / scalar, y / scalar);
     }
 
     // Operadores compuestos
+
+    // Suma
     Vec2f& operator+=(const Vec2f& other) {
         x += other.x;
         y += other.y;
         return *this;
     }
 
+    // Resta
     Vec2f& operator-=(const Vec2f& other) {
         x -= other.x;
         y -= other.y;
         return *this;
     }
 
+    //Mult
     Vec2f& operator*=(float scalar) {
         x *= scalar;
         y *= scalar;
         return *this;
     }
 
+    //Div
     Vec2f& operator/=(float scalar) {
         x /= scalar;
         y /= scalar;
@@ -58,17 +60,20 @@ struct Vec2f {
     }
 
     // Comparación
+
+    //Igualdad
     bool operator==(const Vec2f& other) const {
         return x == other.x && y == other.y;
     }
 
+    //Desigualdad
     bool operator!=(const Vec2f& other) const {
         return !(*this == other);
     }
 
-    // Magnitude (longitud del vector)
+    // Magnitud (longitud del vector)
     float magnitude() const {
-        return std::sqrt(x * x + y * y);
+        return sqrt(x * x + y * y);
     }
 
     // Normalizar (vector unitario)
@@ -83,10 +88,8 @@ struct Vec2f {
     }
 };
 
-// =======================
-// Overload para salida por consola
-// =======================
-inline std::ostream& operator<<(std::ostream& os, const Vec2f& v) {
+// Mostrar vector en consola
+inline ostream& operator<<(ostream& os, const Vec2f& v) {
     os << "(" << v.x << ", " << v.y << ")";
     return os;
 }
