@@ -9,6 +9,7 @@
 
 enum class GameState {
 	MainMenu,
+	OptionsMenu,
 	Playing,
 	Paused,
 	Exiting
@@ -151,7 +152,7 @@ struct Game {
 
 						if (opt == "Start Game") state = GameState::Playing;
 						else if (opt == "Quit") state = GameState::Exiting;
-						// "Options" lo ignorás por ahora, o lo implementás después
+						
 					}
 					break;
 
@@ -172,6 +173,12 @@ struct Game {
 						else if (opt == "Quit") state = GameState::Exiting;
 						else if (opt == "Main Menu") state = GameState::MainMenu;
 					}
+					break;
+
+				case GameState::OptionsMenu:
+
+					// "Options" lo ignoro por ahora, lo implemento después
+
 					break;
 
 				default:
