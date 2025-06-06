@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="Compatibilidad-y-Requisitos.md" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
