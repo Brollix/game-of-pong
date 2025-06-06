@@ -24,3 +24,8 @@ x64/
 # Archivos del sistema operativo
 .DS_Store
 Thumbs.db
+
+# Carpeta de release automático y ZIP de distribución
+/libs/
+/dist/
+/release.zip
