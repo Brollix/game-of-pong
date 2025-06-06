@@ -4,6 +4,7 @@ struct Player {
 
 	SDL_FRect rect;
 	float speed = 300;
+	int score = 0;
 
 	// Inicializar
 	Player(int x, int y, int width, int height) {
@@ -18,21 +19,27 @@ struct Player {
 
 		if (keystates[SDL_SCANCODE_W]) {
 			rect.y += -speed * dt;
-			if (rect.y < 0) rect.y = 0;
+
+			if (rect.y < 0) {
+				rect.y = 0;
+			}
 		}
+
 		if (keystates[SDL_SCANCODE_S]) {
 			rect.y += speed * dt;
-			if (rect.y + rect.h > windowHeight)	rect.y = windowHeight - rect.h;
+
+			if (rect.y + rect.h > windowHeight) {
+				rect.y = windowHeight - rect.h;
+			}
 		}
 	}
 
-	// Dibujar
-	void render(SDL_Renderer* renderer) {
+	void render(SDL_Renderer* renderer) const {
 		SDL_SetRenderDrawColor(renderer, 255, 65, 65, 255);
 		SDL_RenderFillRectF(renderer, &rect);
 	}
 
-	SDL_FRect getFRect() {
+	SDL_FRect getFRect() const {
 		return rect;
 	}
 };
