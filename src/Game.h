@@ -90,27 +90,42 @@ struct Game {
 	}
 
 	bool initSDL() {
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) return false;
-		if (TTF_Init() == -1) return false;
-		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) return false;
-		
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
+			std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+			return false;
+		}
+		if (TTF_Init() == -1) {
+			std::cerr << "TTF_Init Error: " << TTF_GetError() << std::endl;
+			return false;
+		}
+		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+			std::cerr << "Mix_OpenAudio Error: " << Mix_GetError() << std::endl;
+			return false;
+		}
+
 		window = SDL_CreateWindow("Pong SDL2",
 			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+		if (!window) {
+			std::cerr << "CreateWindow Error: " << SDL_GetError() << std::endl;
+			return false;
+		}
 
-		if (!window) return false;
-		
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
 		if (!renderer) {
+			std::cerr << "CreateRenderer Error: " << SDL_GetError() << std::endl;
 			return false;
 		}
 
 		font = TTF_OpenFont("assets/pong.ttf", 24);
-		if (!font) return false;
+		if (!font) {
+			std::cerr << "TTF_OpenFont Error: " << TTF_GetError() << std::endl;
+			return false;
+		}
 
 		return true;
 	}
+
 
 #pragma endregion
 
