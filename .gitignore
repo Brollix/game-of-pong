@@ -29,8 +29,8 @@ Thumbs.db
 /dist/
 /release.zip
 
-# Script de empaquetado local
-/package_release.bat
-
 # Dependencias externas (DLLs, no versionadas)
 /libs/
+
+# Script de empaquetado local
+/package-release.bat
