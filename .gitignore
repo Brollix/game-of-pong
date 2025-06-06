@@ -24,3 +24,4 @@ pong-versiones/
 # Archivos del sistema operativo
 .DS_Store
 Thumbs.db
+/pong-versions
