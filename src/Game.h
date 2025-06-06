@@ -84,7 +84,7 @@ struct Game {
 			font
 		);
 
-		hudDisplay = new HUD(renderer, font);
+		hudDisplay = new HUD(renderer, "assets/pong.ttf", 48);
 
 		return true;
 	}
