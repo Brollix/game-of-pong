@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL_main.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
@@ -21,6 +21,7 @@ int main(int argc, char* argv[]) {
 
     if (!game.init()) {
         cerr << "Error al iniciar el juego." << endl;
+        system("pause");
         return -1;
     }
 
