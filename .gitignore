@@ -24,3 +24,6 @@ x64/
 # Archivos del sistema operativo
 .DS_Store
 Thumbs.db
+/dist
+/libs
+/package-release.bat
