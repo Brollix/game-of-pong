@@ -1,24 +1,26 @@
 #pragma once
 
-struct Ball {
-    SDL_FRect rect;
-    SDL_Texture* texture = nullptr;
-    SDL_Renderer* renderer = nullptr; // Guardamos el renderer
+#include "Utils.h"
+#include <SDL.h>
+#include <SDL_image.h>
 
-    Vec2f dir = { 1, 1 };
-    float speed = 500;
-    int radius = 20;
+struct Ball {
+    Vec2f pos;
+    Vec2f vel;
+    float radius = 10;
+    Vec2f size = { radius, radius };
+    float speed = 500.0f;
+
+    SDL_Texture* texture = nullptr;
+    SDL_Renderer* renderer = nullptr;
 
     Ball(SDL_Renderer* r) : renderer(r) {
         const char* imagePath = "assets/ball.png";
-
         SDL_Surface* surface = IMG_Load(imagePath);
         if (!surface) {
             SDL_Log("Error cargando imagen de pelota: %s", IMG_GetError());
             return;
         }
-
-        setRenderer(r);
 
         texture = SDL_CreateTextureFromSurface(renderer, surface);
         SDL_FreeSurface(surface);
@@ -28,47 +30,45 @@ struct Ball {
             return;
         }
 
-        rect.x = 640;
-        rect.y = 480;
-        rect.w = radius;
-        rect.h = radius;
+        pos = { width / 2.0f, height / 2.0f };
+        //vel = randomVec2iFixed() * speed;
+        vel = { 1, 1 };
 
-        dir = dir.normalized();
+        vel *= speed;
     }
 
-    void move(float dt, int winWidth, int winHeight) {
-        rect.x += dir.x * speed * dt;
-        rect.y += dir.y * speed * dt;
+    void move(float dt) {
+        pos += vel * dt;
 
-        if (rect.x < 0) {
-            rect.x = 0;
-            dir.x = -dir.x;
-        } else if (rect.x + rect.w > winWidth) {
-            rect.x = winWidth - rect.w;
-            dir.x = -dir.x;
+        // Solo rebotar en Y
+        if (pos.y < 0) {
+            pos.y = 0;
+            vel.y = -vel.y;
+        } else if (pos.y + size.y > height) {
+            pos.y = height - size.y;
+            vel.y = -vel.y;
         }
 
-        if (rect.y < 0) {
-            rect.y = 0;
-            dir.y = -dir.y;
-        } else if (rect.y + rect.h > winHeight) {
-            rect.y = winHeight - rect.h;
-            dir.y = -dir.y;
-        }
+        // No rebotar en X (deja que la lógica de Game lo maneje)
     }
+
 
     void render() {
-        if (renderer && texture) {
-            SDL_RenderCopyF(renderer, texture, NULL, &rect);
-        }
-    }
-
-    SDL_FRect getFRect() const {
-        return rect;
+        if (!renderer || !texture) return;
+        SDL_FRect dst = getFRect();
+        SDL_RenderCopyF(renderer, texture, nullptr, &dst);
     }
 
     Vec2f getDir() const {
-        return dir;
+        return vel.normalized();
+    }
+
+    Vec2f getVel() const {
+        return vel;
+    }
+
+    SDL_FRect getFRect() const {
+        return { pos.x, pos.y, size.x, size.y };
     }
 
     void setRenderer(SDL_Renderer* r) {
