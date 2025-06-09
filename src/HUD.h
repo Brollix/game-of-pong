@@ -6,6 +6,7 @@ struct HUD {
 
 	int scoreA = 0;
 	int scoreB = 0;
+
 	SDL_Color color = { 255, 255, 255, 255 };
 
 	HUD(SDL_Renderer* r, TTF_Font* f) {
@@ -24,7 +25,7 @@ struct HUD {
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
 		SDL_Rect dst;
-		dst.x = 20;
+		dst.x = width / 2 - surface->w / 2;
 		dst.y = 20;
 		dst.w = surface->w;
 		dst.h = surface->h;

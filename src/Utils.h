@@ -88,6 +88,10 @@ struct Vec2f {
     }
 };
 
+inline float randInt() {
+    return ((rand() % 2000) / 1000.0f) - 1.0f; // [-1, 1]
+}
+
 inline float dot(const Vec2f& a, const Vec2f& b) {
     return a.x * b.x + a.y * b.y;
 }
@@ -110,11 +114,31 @@ inline float sigmoid(float x) {
     return 1.0f / (1.0f + expf(-x));
 }
 
-inline void appendVec2f(std::vector<float>& out, const Vec2f& v) {
+inline int randomFixed() {
+    return (rand() % 2 == 0) ? -1 : 1;
+}
+
+inline Vec2f randomVec2iFixed() {
+    return { static_cast<float>(randomFixed()), static_cast<float>(randomFixed()) };
+}
+
+inline Vec2f randomVec2f(float min, float max) {
+    float range = max - min;
+    float x = min + static_cast<float>(rand()) / RAND_MAX * range;
+    float y = min + static_cast<float>(rand()) / RAND_MAX * range;
+    return Vec2f{ x, y }.normalized(); // Dirección unitaria
+}
+
+inline float randFloat(float min, float max) {
+    float r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+    float num = min + r * (max - min);
+    return num;
+}
+
+inline void appendVec2f(vector<float>& out, const Vec2f& v) {
     out.push_back(v.x);
     out.push_back(v.y);
 }
-
 
 // Mostrar vector en consola
 inline ostream& operator<<(ostream& os, const Vec2f& v) {

@@ -5,12 +5,11 @@ using namespace std;
 struct Menu {
 	SDL_Renderer* renderer;
 	SDL_Rect rect;
-
 	
 	string pongText = "PONG";;
 
 	vector<string> options;
-	int selected = 0;
+	int selected = 0;	
 
 	TTF_Font* font;
 
