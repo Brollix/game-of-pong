@@ -1,45 +1,51 @@
 #pragma once
 
+#include "Utils.h"
+#include <SDL.h>
+
 struct Player {
+    Vec2f pos;
+    Vec2f size;
+    SDL_Color color;
+    float speed = 300;
+    int score = 0;
 
-	SDL_FRect rect;
-	float speed = 300;
-	int score = 0;
+    Player(float x, float y, float w, float h, SDL_Color rgba = { 255, 255, 255, 255 }) {
+        pos = { x, y };
+        size = { w, h };
+        color = rgba;
 
-	// Inicializar
-	Player(int x, int y, int width, int height) {
-		rect.x = x;
-		rect.y = y;
-		rect.w = width;
-		rect.h = height;
-	}
+        cout << pos << endl;
+    }
 
-	void move(int windowHeight, float dt) {
-		const Uint8* keystates = SDL_GetKeyboardState(NULL);
+    void move(float dt) {
+        const Uint8* keystates = SDL_GetKeyboardState(NULL);
+        if (keystates[SDL_SCANCODE_W]) moveUp(dt);
+        if (keystates[SDL_SCANCODE_S]) moveDown(dt);
+    }
 
-		if (keystates[SDL_SCANCODE_W]) {
-			rect.y += -speed * dt;
+    void moveUp(float dt) {
+        pos.y -= speed * dt;
+        clamp(height);
+    }
 
-			if (rect.y < 0) {
-				rect.y = 0;
-			}
-		}
+    void moveDown(float dt) {
+        pos.y += speed * dt;
+        clamp(height);
+    }
 
-		if (keystates[SDL_SCANCODE_S]) {
-			rect.y += speed * dt;
+    void clamp(int windowHeight) {
+        if (pos.y < 0) pos.y = 0;
+        if (pos.y + size.y > windowHeight) pos.y = windowHeight - size.y;
+    }
 
-			if (rect.y + rect.h > windowHeight) {
-				rect.y = windowHeight - rect.h;
-			}
-		}
-	}
+    void render(SDL_Renderer* renderer) const {
+        SDL_FRect rect = getFRect();
+        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        SDL_RenderFillRectF(renderer, &rect);
+    }
 
-	void render(SDL_Renderer* renderer) const {
-		SDL_SetRenderDrawColor(renderer, 255, 65, 65, 255);
-		SDL_RenderFillRectF(renderer, &rect);
-	}
-
-	SDL_FRect getFRect() const {
-		return rect;
-	}
+    SDL_FRect getFRect() const {
+        return { pos.x, pos.y, size.x, size.y };
+    }
 };
