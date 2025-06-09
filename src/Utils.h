@@ -88,6 +88,34 @@ struct Vec2f {
     }
 };
 
+inline float dot(const Vec2f& a, const Vec2f& b) {
+    return a.x * b.x + a.y * b.y;
+}
+
+inline float magnitude(const Vec2f& v) {
+    return sqrtf(v.x * v.x + v.y * v.y);
+}
+
+inline Vec2f normalize(const Vec2f& v) {
+    float mag = magnitude(v);
+    if (mag == 0.0f) return { 0.0f, 0.0f };
+    return { v.x / mag, v.y / mag };
+}
+
+inline float relu(float x) {
+    return x > 0.0f ? x : 0.0f;
+}
+
+inline float sigmoid(float x) {
+    return 1.0f / (1.0f + expf(-x));
+}
+
+inline void appendVec2f(std::vector<float>& out, const Vec2f& v) {
+    out.push_back(v.x);
+    out.push_back(v.y);
+}
+
+
 // Mostrar vector en consola
 inline ostream& operator<<(ostream& os, const Vec2f& v) {
     os << "(" << v.x << ", " << v.y << ")";

@@ -1,4 +1,4 @@
-#include <SDL_main.h>
+#include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
@@ -6,6 +6,7 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include <cstdlib>
 
 #include <iostream>
 using namespace std;

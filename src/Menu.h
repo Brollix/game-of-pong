@@ -6,6 +6,9 @@ struct Menu {
 	SDL_Renderer* renderer;
 	SDL_Rect rect;
 
+	
+	string pongText = "PONG";;
+
 	vector<string> options;
 	int selected = 0;
 
@@ -59,6 +62,11 @@ struct Menu {
 	void render() {
 		SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
 		SDL_RenderFillRect(renderer, &rect);
+
+		SDL_Color pongTextColor = { 255, 255, 255, 255 };
+
+		SDL_Surface* pongSurface = TTF_RenderText_Blended(font, pongText.c_str(), pongTextColor);
+		SDL_Texture* pongTexture = SDL_CreateTextureFromSurface(renderer, pongSurface);
 
 		int itemHeight = rect.h / (int) options.size();
 
