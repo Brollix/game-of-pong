@@ -153,6 +153,8 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\FileIO.h" />
+    <ClInclude Include="src\NeuralNet.h" />
     <ClInclude Include="src\Ball.h" />
     <ClInclude Include="src\Collisions.h" />
     <ClInclude Include="src\Game.h" />
@@ -160,6 +162,7 @@
     <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Utils.h" />
+    <ClInclude Include="src\Text.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

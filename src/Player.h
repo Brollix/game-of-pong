@@ -1,8 +1,5 @@
 #pragma once
 
-#include "Utils.h"
-#include <SDL.h>
-
 struct Player {
     Vec2f pos;
     Vec2f size;
