@@ -235,7 +235,8 @@ struct Game {
 		}
 
 		if (Collisions::check(ball->getFRect(), player2.getFRect())) {
-			ai.fitness += 50;
+			ai.fitness += 5;
+			cout << "ai hit the ball" << endl;
 		}
 
 		if (ball->pos.x + ball->size.x < 0) {
@@ -253,7 +254,6 @@ struct Game {
 			ai.evaluateAndEvolve();
 			resetGame();
 		}
-
 	}
 
 #pragma endregion

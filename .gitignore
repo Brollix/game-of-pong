@@ -34,3 +34,7 @@ Thumbs.db
 
 # Script de empaquetado local
 /package-release.bat
+/ai_data.hiddenBias
+/ai_data.hiddenWeights
+/ai_data.outputBias
+/ai_data.outputWeights

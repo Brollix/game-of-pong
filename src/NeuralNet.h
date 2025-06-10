@@ -1,18 +1,5 @@
 #pragma once
 
-#include <vector>
-#include <cstdlib>
-#include <ctime>
-#include <cmath>
-#include <string>
-
-#include "Utils.h"
-#include "Ball.h"
-#include "Player.h"
-#include "FileIO.h"
-
-using namespace std;
-
 struct NeuralNet {
     int inputSize;
     int hiddenSize;
@@ -30,7 +17,7 @@ struct NeuralNet {
     float lastY = 0.0f;
     NeuralNet* bestNet = nullptr;
 
-    NeuralNet(int inputSize = 9, int hiddenSize = 8, bool createBest = true)
+    NeuralNet(int inputSize = 8, int hiddenSize = 16, bool createBest = true)
         : inputSize(inputSize), hiddenSize(hiddenSize) {
         hiddenWeights.resize(hiddenSize, vector<float>(inputSize));
         hiddenBias.resize(hiddenSize);
@@ -69,8 +56,7 @@ struct NeuralNet {
         appendVec2f(input, ball.vel);
         appendVec2f(input, normalize(ball.vel));
         appendVec2f(input, ball.pos - paddle.pos);
-        input.push_back(playerY / height);  // Normalizamos la posición del jugador humano
-
+        //input.push_back(playerY / height);
 
         float output = forward(input);
 
@@ -113,7 +99,6 @@ struct NeuralNet {
         for (auto& row : hiddenWeights){ 
                 for (auto& w : row){
                     w = randFloat(min, max);
-                    cout << w << endl;
             } 
         }
 
