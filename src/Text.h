@@ -16,6 +16,11 @@ struct Text {
 
     void setString(const string& str) {
         content = str;
+        if (font && !content.empty()) {
+            TTF_SizeText(font, content.c_str(), &textWidth, &textHeight);
+        } else {
+            textWidth = textHeight = 0;
+        }
     }
 
     void setPosition(float x, float y) {
