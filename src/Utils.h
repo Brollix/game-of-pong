@@ -1,95 +1,34 @@
 #pragma once
 
-struct Vec2f {
-    float x = 0.0f;
-    float y = 0.0f;
+#include <SFML/System/Vector2.hpp>
+#include <cmath>
+#include <iostream>
 
-    Vec2f() = default;
-    Vec2f(float x, float y) : x(x), y(y) {
-    }
+using namespace std;
 
-    // Operadores simples
+// Usamos sf::Vector2f de SFML que ya tiene la mayorÃ­a de operadores
+// Solo agregamos algunas utilidades extra que necesitamos
 
-    // Suma
-    Vec2f operator+(const Vec2f& other) const {
-        return Vec2f(x + other.x, y + other.y);
-    }
-
-    // Resta
-    Vec2f operator-(const Vec2f& other) const {
-        return Vec2f(x - other.x, y - other.y);
-    }
-    // Mult
-    Vec2f operator*(float scalar) const {
-        return Vec2f(x * scalar, y * scalar);
-    }
-
-    // Div
-    Vec2f operator/(float scalar) const {
-        return Vec2f(x / scalar, y / scalar);
-    }
-
-    // Operadores compuestos
-
-    // Suma
-    Vec2f& operator+=(const Vec2f& other) {
-        x += other.x;
-        y += other.y;
-        return *this;
-    }
-
-    // Resta
-    Vec2f& operator-=(const Vec2f& other) {
-        x -= other.x;
-        y -= other.y;
-        return *this;
-    }
-
-    //Mult
-    Vec2f& operator*=(float scalar) {
-        x *= scalar;
-        y *= scalar;
-        return *this;
-    }
-
-    //Div
-    Vec2f& operator/=(float scalar) {
-        x /= scalar;
-        y /= scalar;
-        return *this;
-    }
-
-    // Comparación
-
-    //Igualdad
-    bool operator==(const Vec2f& other) const {
-        return x == other.x && y == other.y;
-    }
-
-    //Desigualdad
-    bool operator!=(const Vec2f& other) const {
-        return !(*this == other);
-    }
-
+namespace VecUtils {
     // Magnitud (longitud del vector)
-    float magnitude() const {
-        return sqrt(x * x + y * y);
+    inline float magnitude(const sf::Vector2f& v) {
+        return sqrt(v.x * v.x + v.y * v.y);
     }
 
     // Normalizar (vector unitario)
-    Vec2f normalized() const {
-        float mag = magnitude();
-        return mag != 0 ? (*this) / mag : Vec2f(0, 0);
+    inline sf::Vector2f normalized(const sf::Vector2f& v) {
+        float mag = magnitude(v);
+        return mag != 0 ? sf::Vector2f(v.x / mag, v.y / mag) : sf::Vector2f(0, 0);
     }
 
     // Producto punto
-    float dot(const Vec2f& other) const {
-        return x * other.x + y * other.y;
+    inline float dot(const sf::Vector2f& a, const sf::Vector2f& b) {
+        return a.x * b.x + a.y * b.y;
     }
-};
+}
 
 // Mostrar vector en consola
-inline ostream& operator<<(ostream& os, const Vec2f& v) {
+inline ostream& operator<<(ostream& os, const sf::Vector2f& v) {
     os << "(" << v.x << ", " << v.y << ")";
     return os;
 }

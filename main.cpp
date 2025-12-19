@@ -1,13 +1,9 @@
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
-
+#include <SFML/Graphics.hpp>
+#include <iostream>
 #include <cmath>
 #include <string>
 #include <vector>
 
-#include <iostream>
 using namespace std;
 
 int width = 1280;
@@ -15,7 +11,7 @@ int height = 720;
 
 #include "src/Game.h"
 
-int main(int argc, char* argv[]) {
+int main() {
 
     Game game(width, height);
 

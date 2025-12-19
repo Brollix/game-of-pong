@@ -1,101 +1,104 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+#include <vector>
+#include <string>
+
 using namespace std;
 
 struct Menu {
-	SDL_Renderer* renderer;
-	SDL_Rect rect;
+	sf::RectangleShape background;
+	sf::FloatRect rect;
 
 	vector<string> options;
 	int selected = 0;
 
-	TTF_Font* font;
+	sf::Font* font;
 
 	// Para guardar las posiciones de cada item en pantalla
-	vector<SDL_Rect> itemRects;
+	vector<sf::FloatRect> itemRects;
+	vector<sf::Text> texts;
 
-	Menu(SDL_Renderer* r, SDL_Rect area, vector<string> items, TTF_Font* f) {
-		renderer = r;
+	Menu(sf::FloatRect area, vector<string> items, sf::Font* f) {
 		rect = area;
 		options = items;
 		font = f;
 		itemRects.resize(options.size());
+		texts.resize(options.size());
+
+		background.setPosition(rect.left, rect.top);
+		background.setSize(sf::Vector2f(rect.width, rect.height));
+		background.setFillColor(sf::Color(30, 30, 30));
+
+		// Preparar textos
+		for (int i = 0; i < options.size(); i++) {
+			texts[i].setFont(*font);
+			texts[i].setString(options[i]);
+			texts[i].setCharacterSize(24);
+		}
 	}
 
-	void update(const SDL_Event& event) {
-		int mouseX, mouseY;
-		SDL_GetMouseState(&mouseX, &mouseY);
-
+	void update(const sf::Event& event, const sf::Vector2i& mousePos) {
 		// Detectar hover
 		for (int i = 0; i < itemRects.size(); i++) {
-			SDL_Rect mouseRect = { mouseX, mouseY, 1, 1 };
-			if (SDL_HasIntersection(&mouseRect, &itemRects[i])) {
+			if (itemRects[i].contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
 				selected = i;
 				break;
 			}
 		}
 
-		if (event.type == SDL_KEYDOWN) {
-			if (event.key.keysym.sym == SDLK_UP) {
+		if (event.type == sf::Event::KeyPressed) {
+			if (event.key.code == sf::Keyboard::Up) {
 				selected = (selected - 1 + options.size()) % options.size();
 			}
-			if (event.key.keysym.sym == SDLK_DOWN) {
+			if (event.key.code == sf::Keyboard::Down) {
 				selected = (selected + 1) % options.size();
 			}
 		}
 
-		if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 			for (int i = 0; i < itemRects.size(); i++) {
-				SDL_Rect mouseRect = { mouseX, mouseY, 1, 1 };
-				if (SDL_HasIntersection(&mouseRect, &itemRects[i])) {
+				if (itemRects[i].contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
 					selected = i;
-					// Acción puede ejecutarse en el exterior con getOption()
 					break;
 				}
 			}
 		}
 	}
 
-	void render() {
-		SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
-		SDL_RenderFillRect(renderer, &rect);
+	void render(sf::RenderWindow& window) {
+		window.draw(background);
 
-		int itemHeight = rect.h / (int) options.size();
+		float itemHeight = rect.height / options.size();
 
 		for (int i = 0; i < options.size(); i++) {
-			SDL_Color color = (i == selected)
-				? SDL_Color{ 255, 65, 65, 255 }
-			: SDL_Color{ 200, 200, 200, 255 };
+			sf::Color color = (i == selected)
+				? sf::Color(255, 65, 65)
+				: sf::Color(200, 200, 200);
 
-			SDL_Surface* surface = TTF_RenderText_Blended(font, options[i].c_str(), color);
-			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+			texts[i].setFillColor(color);
 
-			int textW, textH;
-			SDL_QueryTexture(texture, NULL, NULL, &textW, &textH);
+			sf::FloatRect textBounds = texts[i].getLocalBounds();
+			texts[i].setOrigin(textBounds.left + textBounds.width / 2, textBounds.top + textBounds.height / 2);
+			texts[i].setPosition(
+				rect.left + rect.width / 2,
+				rect.top + i * itemHeight + itemHeight / 2
+			);
 
-			SDL_Rect dst;
-			dst.x = rect.x + (rect.w - textW) / 2;
-			dst.y = rect.y + i * itemHeight + (itemHeight - textH) / 2;
-			dst.w = textW;
-			dst.h = textH;
+			// Guardar posiciÃ³n para detecciÃ³n de mouse
+			itemRects[i] = texts[i].getGlobalBounds();
 
-			// Guardar posición para detección de mouse
-			itemRects[i] = dst;
+			window.draw(texts[i]);
 
-			SDL_RenderCopy(renderer, texture, NULL, &dst);
-
-			// Subrayado si está seleccionado
+			// Subrayado si estÃ¡ seleccionado
 			if (i == selected) {
-				SDL_SetRenderDrawColor(renderer, 255, 65, 65, 255);
-				SDL_Rect underline = {
-					dst.x, dst.y + dst.h,
-					dst.w, 2
-				};
-				SDL_RenderFillRect(renderer, &underline);
+				sf::RectangleShape underline;
+				underline.setSize(sf::Vector2f(textBounds.width, 2));
+				underline.setPosition(texts[i].getPosition().x - textBounds.width / 2, 
+									  texts[i].getPosition().y + textBounds.height / 2 + 5);
+				underline.setFillColor(sf::Color(255, 65, 65));
+				window.draw(underline);
 			}
-
-			SDL_FreeSurface(surface);
-			SDL_DestroyTexture(texture);
 		}
 	}
 

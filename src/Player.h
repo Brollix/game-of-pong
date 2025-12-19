@@ -1,45 +1,48 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+
 struct Player {
 
-	SDL_FRect rect;
+	sf::RectangleShape shape;
 	float speed = 300;
 	int score = 0;
 
 	// Inicializar
-	Player(int x, int y, int width, int height) {
-		rect.x = x;
-		rect.y = y;
-		rect.w = width;
-		rect.h = height;
+	Player(float x, float y, float width, float height) {
+		shape.setPosition(x, y);
+		shape.setSize(sf::Vector2f(width, height));
+		shape.setFillColor(sf::Color(255, 65, 65));
 	}
 
-	void move(int windowHeight, float dt) {
-		const Uint8* keystates = SDL_GetKeyboardState(NULL);
+	void move(float windowHeight, float dt) {
+		sf::Vector2f pos = shape.getPosition();
+		sf::Vector2f size = shape.getSize();
 
-		if (keystates[SDL_SCANCODE_W]) {
-			rect.y += -speed * dt;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			pos.y -= speed * dt;
 
-			if (rect.y < 0) {
-				rect.y = 0;
+			if (pos.y < 0) {
+				pos.y = 0;
 			}
 		}
 
-		if (keystates[SDL_SCANCODE_S]) {
-			rect.y += speed * dt;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			pos.y += speed * dt;
 
-			if (rect.y + rect.h > windowHeight) {
-				rect.y = windowHeight - rect.h;
+			if (pos.y + size.y > windowHeight) {
+				pos.y = windowHeight - size.y;
 			}
 		}
+
+		shape.setPosition(pos);
 	}
 
-	void render(SDL_Renderer* renderer) const {
-		SDL_SetRenderDrawColor(renderer, 255, 65, 65, 255);
-		SDL_RenderFillRectF(renderer, &rect);
+	void render(sf::RenderWindow& window) {
+		window.draw(shape);
 	}
 
-	SDL_FRect getFRect() const {
-		return rect;
+	sf::FloatRect getBounds() const {
+		return shape.getGlobalBounds();
 	}
 };

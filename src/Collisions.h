@@ -1,8 +1,10 @@
 #pragma once
 
-static struct Collisions {    
+#include <SFML/Graphics/Rect.hpp>
+
+struct Collisions {    
     
-    static bool check(const SDL_FRect a, const SDL_FRect b) {
-        return SDL_HasIntersectionF(&a, &b);
+    static bool check(const sf::FloatRect& a, const sf::FloatRect& b) {
+        return a.intersects(b);
     }
 };

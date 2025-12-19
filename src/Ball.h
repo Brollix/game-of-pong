@@ -1,77 +1,105 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
+#include "Utils.h"
+
+using namespace std;
+
 struct Ball {
-    SDL_FRect rect;
-    SDL_Texture* texture = nullptr;
-    SDL_Renderer* renderer = nullptr; // Guardamos el renderer
-
-    Vec2f dir = { 1, 1 };
+    sf::Sprite sprite;
+    sf::Texture texture;
+    
+    sf::Vector2f dir = { 1, 1 };
     float speed = 500;
-    int radius = 20;
+    float radius = 20;
+    float windowWidth;
+    float windowHeight;
 
-    Ball(SDL_Renderer* r) : renderer(r) {
+    Ball(float windowWidth, float windowHeight) 
+        : windowWidth(windowWidth), windowHeight(windowHeight) {
         const char* imagePath = "assets/ball.png";
 
-        SDL_Surface* surface = IMG_Load(imagePath);
-        if (!surface) {
-            SDL_Log("Error cargando imagen de pelota: %s", IMG_GetError());
-            return;
+        if (!texture.loadFromFile(imagePath)) {
+            cerr << "Error cargando imagen de pelota: " << imagePath << endl;
         }
 
-        setRenderer(r);
+        sprite.setTexture(texture);
+        sprite.setScale(radius / texture.getSize().x, radius / texture.getSize().y);
 
-        texture = SDL_CreateTextureFromSurface(renderer, surface);
-        SDL_FreeSurface(surface);
-
-        if (!texture) {
-            SDL_Log("Error creando textura de pelota: %s", SDL_GetError());
-            return;
+        reset();
+    }
+    
+    void reset() {
+        // Centrar en pantalla
+        sprite.setPosition(windowWidth / 2 - radius / 2, windowHeight / 2 - radius / 2);
+        
+        // Dirección aleatoria hacia un lado con variación angular
+        static bool seeded = false;
+        if (!seeded) {
+            srand(static_cast<unsigned int>(time(nullptr)));
+            seeded = true;
         }
-
-        rect.x = 640;
-        rect.y = 480;
-        rect.w = radius;
-        rect.h = radius;
-
-        dir = dir.normalized();
+        
+        // Generar ángulo aleatorio entre 30 y 60 grados (en radianes)
+        const float MIN_ANGLE = 30.0f * 3.14159f / 180.0f;  // 30 grados en radianes
+        const float MAX_ANGLE = 60.0f * 3.14159f / 180.0f;  // 60 grados en radianes
+        float angleRange = MAX_ANGLE - MIN_ANGLE;
+        float randomAngle = MIN_ANGLE + (rand() / (float)RAND_MAX) * angleRange;
+        
+        // Dirección vertical aleatoria (arriba o abajo)
+        float dirY = (rand() % 2 == 0 ? 1.0f : -1.0f);
+        
+        // Dirección horizontal aleatoria (izquierda o derecha)
+        float dirX = (rand() % 2 == 0 ? 1.0f : -1.0f);
+        
+        // Calcular componentes del vector usando el ángulo
+        dir.x = dirX * cos(randomAngle);
+        dir.y = dirY * sin(randomAngle);
+        
+        // Normalizar (por seguridad, aunque ya debería estar normalizado)
+        dir = VecUtils::normalized(dir);
     }
 
-    void move(float dt, int winWidth, int winHeight) {
-        rect.x += dir.x * speed * dt;
-        rect.y += dir.y * speed * dt;
+    void move(float dt, float winWidth, float winHeight) {
+        sf::Vector2f pos = sprite.getPosition();
+        pos += dir * speed * dt;
 
-        if (rect.x < 0) {
-            rect.x = 0;
-            dir.x = -dir.x;
-        } else if (rect.x + rect.w > winWidth) {
-            rect.x = winWidth - rect.w;
-            dir.x = -dir.x;
-        }
-
-        if (rect.y < 0) {
-            rect.y = 0;
+        // Rebote en bordes verticales (arriba/abajo)
+        if (pos.y < 0) {
+            pos.y = 0;
             dir.y = -dir.y;
-        } else if (rect.y + rect.h > winHeight) {
-            rect.y = winHeight - rect.h;
+        } else if (pos.y + radius > winHeight) {
+            pos.y = winHeight - radius;
             dir.y = -dir.y;
         }
-    }
 
-    void render() {
-        if (renderer && texture) {
-            SDL_RenderCopyF(renderer, texture, NULL, &rect);
+        sprite.setPosition(pos);
+    }
+    
+    // Check if ball went out of bounds (scored)
+    int checkScore(float winWidth) {
+        sf::Vector2f pos = sprite.getPosition();
+        if (pos.x < -radius) {
+            return 2; // Right player scored
+        } else if (pos.x > winWidth) {
+            return 1; // Left player scored
         }
+        return 0; // No score
     }
 
-    SDL_FRect getFRect() const {
-        return rect;
+    void render(sf::RenderWindow& window) {
+        window.draw(sprite);
     }
 
-    Vec2f getDir() const {
+    sf::FloatRect getBounds() const {
+        return sprite.getGlobalBounds();
+    }
+
+    sf::Vector2f getDir() const {
         return dir;
-    }
-
-    void setRenderer(SDL_Renderer* r) {
-        renderer = r;
     }
 };
