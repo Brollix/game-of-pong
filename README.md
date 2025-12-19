@@ -1,8 +1,8 @@
-# 🎮 Pong - C++ con SFML 2.6.2
+# Pong - C++ con SFML 2.6.2
 
-Recreación del clásico juego Pong en C++ usando SFML. Incluye menús interactivos, sistema de colisiones, y **instalación automática de dependencias**.
+Recreación moderna del clásico juego Pong con **sistema de IA avanzado**, redes neuronales, algoritmos genéticos y torneos evolutivos. Incluye oponente AI con Q-Learning, sistema de entrenamiento poblacional y persistencia de modelos.
 
-##  Inicio Rápido
+## Inicio Rápido
 
 ```bash
 # Clonar el repositorio
@@ -15,43 +15,37 @@ cd game-of-pong
 ./run.sh     # Linux/MSYS2
 ```
 
-**¡Solo necesitas tener g++ instalado!** SFML se descarga automáticamente (~30 MB) la primera vez.
+**Solo necesitas g++ instalado.** SFML se descarga automáticamente (~30 MB) la primera vez.
 
----
+## Requisitos
 
-##  Requisitos
-
-- **g++ (MinGW)** - [¿Cómo instalar?](#instalación-de-g)
+- **g++ (MinGW)** con soporte C++17
 - **Git Bash** - Incluido con [Git for Windows](https://git-scm.com/)
 - **Conexión a internet** - Solo la primera vez para descargar SFML
 
----
+## Características
 
-##  Características
+- **Oponente AI con red neuronal** - Q-Learning con exploración/explotación
+- **Sistema de torneos evolutivos** - Poblaciones de IA compitiendo y evolucionando
+- **Algoritmos genéticos** - Selección, crossover y mutación de hiperparámetros
+- **Persistencia de modelos** - Guardar/cargar redes neuronales entrenadas
+- **Instalación automática de SFML** - Sin configuración manual
+- **Menú interactivo** - Navegación con mouse y teclado
+- **Sistema de pausa** - Control total del flujo del juego
+- **Física realista** - Colisiones y movimiento fluido con delta time
 
-- Instalación automática de SFML  
-- Menú principal interactivo (mouse/teclado)  
-- Sistema de pausa  
-- Física de pelota y colisiones  
-- Movimiento fluido con delta time  
-- HUD con marcador  
-- Fuentes y sprites personalizados
+## Controles
 
----
+| Tecla     | Acción                 |
+| --------- | ---------------------- |
+| **W**     | Mover paleta arriba    |
+| **S**     | Mover paleta abajo     |
+| **ESC**   | Pausar juego/menú      |
+| **SPACE** | Pausar/reanudar torneo |
+| **Mouse** | Navegar menús          |
+| **Enter** | Seleccionar opción     |
 
-##  Controles
-
-| Tecla     | Acción              |
-| --------- | ------------------- |
-| **W**     | Mover paleta arriba |
-| **S**     | Mover paleta abajo  |
-| **ESC**   | Pausar juego        |
-| **Mouse** | Navegar menús       |
-| **Enter** | Seleccionar opción  |
-
----
-
-## 🔧 Opciones de Compilación
+## Opciones de Compilación
 
 ### Opción 1: run.bat/run.sh (Recomendado)
 
@@ -60,79 +54,64 @@ cd game-of-pong
 ./run.sh     # Linux/MSYS2
 ```
 
-El script automáticamente:
+El script automáticamente detecta SFML, descarga si es necesario, compila el código, copia DLLs y ejecuta el juego.
 
-- Detecta y descarga SFML si no existe
-- Compila el código
-- Copia las DLLs necesarias
-- Ejecuta el juego
+### Opción 2: Makefile
 
-##  Estructura del Proyecto
+```bash
+make        # Compilar
+make run    # Compilar y ejecutar
+make clean  # Limpiar binarios
+```
+
+## Estructura del Proyecto
 
 ```
 game-of-pong/
-├── assets/           # Recursos (imágenes, fuentes)
-├── src/              # Código fuente (headers)
-│   ├── Ball.h       # Física de la pelota
-│   ├── Player.h     # Lógica del jugador
-│   ├── Game.h       # Game loop principal
-│   ├── Menu.h       # Sistema de menús
-│   ├── HUD.h        # Interfaz de usuario
-│   ├── Collisions.h # Detección de colisiones
-│   └── Utils.h      # Utilidades matemáticas
-├── main.cpp         # Punto de entrada
-├── run.bat/.sh      # Script de compilación
-├── setup.bat/.sh    # Instalador de SFML
-└── Makefile         # Build system alternativo
+├── assets/                  # Recursos (imágenes, fuentes)
+├── src/                     # Código fuente
+│   ├── Game.h              # Game loop, estados, integración de torneos
+│   ├── AIPlayer.h          # Oponente AI con red neuronal
+│   ├── NeuralNetwork.h     # Implementación de red neuronal feedforward
+│   ├── QLearningAgent.h    # Agente de Q-Learning
+│   ├── TournamentManager.h # Orquestación de torneos evolutivos
+│   ├── AIPopulation.h      # Gestión de población y algoritmos genéticos
+│   ├── TournamentMatch.h   # Simulador de partidas (visual/headless)
+│   ├── ModelSaver.h        # Persistencia de modelos
+│   ├── Ball.h              # Física de la pelota
+│   ├── Player.h            # Lógica del jugador
+│   ├── Menu.h              # Sistema de menús
+│   ├── HUD.h               # Interfaz de usuario y estadísticas
+│   ├── Collisions.h        # Detección de colisiones AABB
+│   └── Utils.h             # Utilidades matemáticas
+├── models/                  # Modelos guardados (generados)
+├── main.cpp                # Punto de entrada
+├── run.bat/.sh             # Script de compilación automática
+└── TOURNAMENT_SYSTEM.md    # Documentación detallada del sistema de torneos
 ```
 
-##  Mejoras Futuras
+## Sistema de Torneos
 
-- [ ] IA para oponente (paleta derecha)
-- [ ] Sistema de puntuación funcional
-- [ ] Detección de goles
-- [ ] Modo 2 jugadores local
-- [ ] Efectos de sonido
-- [ ] Física de colisiones mejorada
-- [ ] Pantalla de victoria/derrota
+El juego incluye un sistema completo de torneos evolutivos donde poblaciones de IA compiten y evolucionan:
 
----
+- **Algoritmo genético** - Selección elitista, crossover uniforme, mutación adaptativa
+- **Round-robin tournaments** - Cada IA juega contra todas las demás
+- **Evolución de hiperparámetros** - Learning rate, epsilon decay, tamaño de capa oculta, etc.
+- **Evaluación de fitness** - Combinación de win rate y calidad de aprendizaje
+- **Guardado automático** - Top 3 modelos por generación
 
-##  Arquitectura del Código
+Ver [TOURNAMENT_SYSTEM.md](TOURNAMENT_SYSTEM.md) para documentación completa de arquitectura, configuración y uso.
 
-| Archivo        | Descripción                          |
-| -------------- | ------------------------------------ |
-| `Game.h`       | Game loop, estados, lógica principal |
-| `Player.h`     | Paleta del jugador con input         |
-| `Ball.h`       | Física y movimiento de la pelota     |
-| `Menu.h`       | Sistema de menús interactivos        |
-| `HUD.h`        | Interfaz de puntuación               |
-| `Collisions.h` | Detección de colisiones AABB         |
-| `Utils.h`      | Vector2f y funciones matemáticas     |
-
----
-
-##  Tecnologías
+## Tecnologías
 
 - **Lenguaje:** C++17
-- **Biblioteca:** [SFML 2.6.2](https://www.sfml-dev.org/)
-- **Compilador:** GCC/MinGW
+- **Biblioteca gráfica:** [SFML 2.6.2](https://www.sfml-dev.org/)
+- **Machine Learning:** Red neuronal feedforward, Q-Learning, algoritmos genéticos
+- **Compilador:** GCC/MinGW 15.2.0+
 - **Build System:** Bash Scripts + Makefile
 
----
-
-##  Licencia
+## Licencia
 
 Proyecto bajo [Licencia MIT](LICENSE). Libre uso y modificación.
 
 SFML está licenciado bajo [zlib/png license](https://www.sfml-dev.org/license.php).
-
----
-
-##  Notas
-
-- **Compatibilidad:** Windows con MinGW/MSYS2
-- **Instalación:** Totalmente automática con `./run.bat`
-- **Repositorio ligero:** SFML no se incluye en Git (~30 MB se descargan automáticamente)
-
----
