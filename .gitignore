@@ -45,3 +45,12 @@ CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 Makefile.old
+
+# Modelos AI y métricas generadas
+models/
+*.bin
+ai_metrics.txt
+*_metrics.txt
+ai_model.bin
+tournament_summary.txt
+final_population.dat
