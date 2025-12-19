@@ -1,29 +1,47 @@
-# Archivos generados por Visual Studio
-.vs/
-*.vcxproj.user
-*.VC.db
-*.sdf
+# Ejecutables y binarios
+bin/
+*.exe
+*.out
+*.o
+*.obj
 
-# Carpetas de compilación
+# Librerías SFML (descargadas automáticamente)
+SFML-2.6.2/
+SFML-*.zip
+
+# Visual Studio
+.vs/
 Debug/
 Release/
 x64/
+*.user
+*.suo
+*.sln.old
+*.vcxproj.old
+*.vcxproj.filters.old
 
-# Archivos temporales del sistema
-*.log
-*.obj
-*.pch
-*.ipch
-*.aps
-*.ncb
-*.opendb
+# IDE
+.vscode/
+.idea/
+*.code-workspace
 
-# Ignorar carpeta de versiones manuales
-/pong-versions
-
-# Archivos del sistema operativo
+# Sistema
 .DS_Store
 Thumbs.db
-/dist
-/libs
-/package-release.bat
+desktop.ini
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+
+# Build artifacts
+*.a
+*.lib
+*.dll.a
+
+# CMake (si se usa en el futuro)
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile.old
